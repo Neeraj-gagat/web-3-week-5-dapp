@@ -1,5 +1,6 @@
 import { useConnection, useWallet } from "@solana/wallet-adapter-react"
 import { useState } from "react";
+ import { Connection, PublicKey, LAMPORTS_PER_SOL } from "@solana/web3.js";
 
 export function Airdrop() {
     // const [value , setValue] = useState(0)
@@ -7,27 +8,31 @@ export function Airdrop() {
     const {connection} = useConnection();
     
     async function sendAirdrop() {
-        if (!wallet.publicKey)
-            return;
-        try {
-            const amount = (document.getElementById("amountsol") as HTMLInputElement | null)?.value;
-            const lamports = Math.floor(Number(amount) * 1000000000);
-            if (!amount) {
-                alert("Please enter an amount");
-                return;
-            }
-            const signature = await connection.requestAirdrop(wallet.publicKey, lamports)
-            const latestBlockHash = await connection.getLatestBlockhash();
-        await connection.confirmTransaction({
-            blockhash: latestBlockHash.blockhash,
-            lastValidBlockHeight: latestBlockHash.lastValidBlockHeight,
-            signature: signature,
-        });
-            alert(`Airdroped ${amount} SOL to ${wallet.publicKey.toString()}`)
-        }catch (err) {
-            alert("Airdrop failed: " + err)
-        }
+  if (!wallet.publicKey) return;
+
+  try {
+    const amount = (document.getElementById("amountsol") as HTMLInputElement | null)?.value;
+    if (!amount) {
+      alert("Please enter an amount");
+      return;
     }
+
+    // Use the public devnet endpoint just for airdrop
+    const devnetConnection = new Connection("https://api.devnet.solana.com", "confirmed");
+
+    const signature = await devnetConnection.requestAirdrop(
+      wallet.publicKey,
+      Number(amount) * LAMPORTS_PER_SOL
+    );
+
+    const { blockhash, lastValidBlockHeight } = await devnetConnection.getLatestBlockhash();
+    await devnetConnection.confirmTransaction({ signature, blockhash, lastValidBlockHeight });
+
+    alert(`Airdropped ${amount} SOL to ${wallet.publicKey.toString()}`);
+  } catch (err) {
+    alert("Airdrop failed: " + err);
+  }
+}
 
     return (
         <div className="flex flex-col items-center pt-10">

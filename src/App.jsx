@@ -16,7 +16,9 @@ import '@solana/wallet-adapter-react-ui/styles.css';
 import { Airdrop } from './components/Airdrop';
 
 function App() {
+const endpoint = import.meta.env.VITE_RPC_URL
 
+console.log(endpoint)
   // const network = WalletAdapterNetwork.Devnet;
 
   //   // You can also provide a custom RPC endpoint.
@@ -24,13 +26,14 @@ function App() {
 
   return (
     <>
-       <ConnectionProvider config={{commitment: "confirmed"}} endpoint={"https://api.devnet.solana.com"}>
+       <ConnectionProvider endpoint={endpoint}>
             <WalletProvider wallets={[]} autoConnect>
                 <WalletModalProvider>
                     <div className='flex flex-col items-center justify-center gap-3 pt-10'>
                       <WalletMultiButton />
                     <WalletDisconnectButton />
                       <Airdrop/>
+                      
                     </div>
                 </WalletModalProvider>
             </WalletProvider>
