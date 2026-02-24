@@ -14,6 +14,7 @@ import {
 // Default styles that can be overridden by your app
 import '@solana/wallet-adapter-react-ui/styles.css';
 import { Airdrop } from './components/Airdrop';
+import { ShowBalance } from './components/ShowBalance';
 
 function App() {
 const endpoint = import.meta.env.VITE_RPC_URL
@@ -33,6 +34,7 @@ console.log(endpoint)
                       <WalletMultiButton />
                     <WalletDisconnectButton />
                       <Airdrop/>
+                      <ShowBalance/>
                       
                     </div>
                 </WalletModalProvider>
