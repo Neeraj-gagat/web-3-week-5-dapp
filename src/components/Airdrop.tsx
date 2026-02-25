@@ -17,16 +17,16 @@ export function Airdrop() {
       return;
     }
 
-    // Use the public devnet endpoint just for airdrop
-    const devnetConnection = new Connection("https://api.devnet.solana.com", "confirmed");
+    // for airdrop only 
+    // const devnetConnection = new Connection("https://api.devnet.solana.com")
 
-    const signature = await devnetConnection.requestAirdrop(
+    const signature = await connection.requestAirdrop(
       wallet.publicKey,
       Number(amount) * LAMPORTS_PER_SOL
     );
 
-    const { blockhash, lastValidBlockHeight } = await devnetConnection.getLatestBlockhash();
-    await devnetConnection.confirmTransaction({ signature, blockhash, lastValidBlockHeight });
+    const { blockhash, lastValidBlockHeight } = await connection.getLatestBlockhash();
+    await connection.confirmTransaction({ signature, blockhash, lastValidBlockHeight });
 
     alert(`Airdropped ${amount} SOL to ${wallet.publicKey.toString()}`);
   } catch (err) {

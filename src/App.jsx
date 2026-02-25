@@ -19,7 +19,6 @@ import { ShowBalance } from './components/ShowBalance';
 function App() {
 const endpoint = import.meta.env.VITE_RPC_URL
 
-console.log(endpoint)
   // const network = WalletAdapterNetwork.Devnet;
 
   //   // You can also provide a custom RPC endpoint.
